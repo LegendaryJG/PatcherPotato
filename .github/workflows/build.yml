@@ -7,8 +7,6 @@ on:
   pull_request:
 
 concurrency:
-  # Maximum of one running workflow per pull request source branch
-  # or branch and run number combination (cancels old run if action is rerun)
   group: ${{ github.head_ref || format('{0}-{1}', github.ref, github.run_number) }}
   cancel-in-progress: true
 
@@ -27,14 +25,14 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
             **/loom-cache
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-v4-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-v2-
+            ${{ runner.os }}-gradle-v4-
 
       - run: ./gradlew --no-daemon build
